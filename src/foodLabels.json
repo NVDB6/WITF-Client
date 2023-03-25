@@ -1,0 +1,42 @@
+{
+    "Apple": {
+        "name": "Apple",
+        "expiration": 25
+    },
+    "Avocado": {
+        "name": "Avocado",
+        "expiration": 4
+    },
+    "Banana": {
+        "name": "Banana",
+        "expiration": 8
+    },
+    "Beef": {
+        "name": "Beef",
+        "expiration": 4
+    },
+    "Bell_pepper": {
+        "name": "Bell pepper",
+        "expiration": 11
+    },
+    "Container": {
+        "name": "Container",
+        "expiration": -1
+    },
+    "Ketchup": {
+        "name": "Ketchup",
+        "expiration": 365
+    },
+    "Milk": {
+        "name": "Milk",
+        "expiration": 5
+    },
+    "Orange": {
+        "name": "Orange",
+        "expiration": 25
+    },
+    "Yogurt": {
+        "name": "Yogurt",
+        "expiration": 11
+    }
+}
