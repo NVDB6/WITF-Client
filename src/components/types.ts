@@ -2,7 +2,7 @@ type ActionType = {
   itemName: string;
   intoFridge: boolean;
   timeAction: Date;
-  dateBought?: Date;
+  dateBought: Date;
 };
 type ActionListType = { [id: string]: ActionType };
 

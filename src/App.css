@@ -2,10 +2,3 @@
   display: flex;
   flex-direction: row;
 }
-
-.table-container {
-  /* background-color: aqua; */
-  border-left: 0.5px solid gray;
-  border-right: 0.5px solid gray;
-  width: 50%;
-}

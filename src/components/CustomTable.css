@@ -1,0 +1,30 @@
+.table-container {
+    width: 50%;
+    height: 100vh
+}
+
+.table-row-primary {
+    border-bottom: 1px solid #A9BD9A !important;
+}
+
+.table-row-secondary {
+    border-bottom: 1px solid #526C3F !important;
+}
+
+.MuiTableCell-root {
+    border-bottom: none !important;
+}
+
+.primary-bg {
+    background-color: #A9BD9A;
+    color: #526C3F
+}
+
+.secondary-bg {
+    background-color: #526C3F;
+    color: #A9BD9A
+}
+
+.header-bg {
+    background-color: #EFD9A6;
+}
