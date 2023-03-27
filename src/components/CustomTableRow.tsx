@@ -2,6 +2,7 @@ import { TableRow } from "@mui/material";
 import CustomTableCell from "./CustomTableCell";
 import { ActionType, ItemType } from "../utils/types";
 import { FoodItems } from "../utils/FoodItems";
+import { FaTrash } from "react-icons/fa";
 
 type Props = {
   isInventory: boolean;
@@ -83,6 +84,15 @@ const CustomTableRow = ({ isInventory, item }: Props) => {
       />
       <CustomTableCell
         text={timeAction.getTime() === dateBought.getTime() ? "New" : "Same"}
+        isHeader={false}
+        isInventory={isInventory}
+      />
+      <CustomTableCell
+        text={
+          <button className="delete-button">
+            <FaTrash color="white" size={30} />
+          </button>
+        }
         isHeader={false}
         isInventory={isInventory}
       />

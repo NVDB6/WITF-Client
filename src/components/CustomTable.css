@@ -1,6 +1,6 @@
 .table-container {
     width: 50%;
-    height: 100vh
+    height: 100vh;
 }
 
 .table-row-primary {
@@ -29,6 +29,13 @@
 
 .header-bg {
     background-color: #EFD9A6;
+}
+
+.delete-button {
+    background-color: red;
+    border-radius: 10px;
+    border: none;
+    padding: 10px
 }
 
 .item-image {

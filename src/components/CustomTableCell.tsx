@@ -8,7 +8,7 @@ type Props = {
 
 const CustomTableCell = ({ text, isHeader, isInventory }: Props) => {
   return (
-    <TableCell>
+    <TableCell style={{ backgroundColor: isInventory ? "#A9BD9A" : "#526C3F" }}>
       <Typography
         sx={{
           color: `#${!isInventory ? "A9BD9A" : "526C3F"}`,

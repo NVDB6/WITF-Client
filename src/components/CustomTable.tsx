@@ -7,6 +7,7 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
+import { FoodItems } from "../utils/FoodItems";
 import {
   ActionListType,
   ActionType,
@@ -25,6 +26,15 @@ type Props = {
 
 const CustomTable = ({ title, headers, items }: Props) => {
   const isInventory = title === "Fridge Inventory";
+
+  const getExpiration = (id: string) =>
+    (
+      FoodItems as {
+        [id: string]: { name: string; expiration: number };
+      }
+    )[items[id].itemName].expiration -
+    (new Date().getDate() - items[id].dateBought.getDate());
+
   return (
     <div
       key={title}
@@ -32,14 +42,9 @@ const CustomTable = ({ title, headers, items }: Props) => {
         isInventory ? "primary-bg" : "secondary-bg"
       }`}
     >
-      <Toolbar
-        sx={{
-          pl: { sm: 2 },
-          pr: { xs: 1, sm: 1 },
-        }}
-      >
+      <Toolbar style={{ height: "10%" }}>
         <Typography
-          sx={{ flex: "1 1 100%", fontWeight: 500, marginTop: "50px" }}
+          sx={{ flex: "1 1 100%", fontWeight: 500, margin: "20px 0 10px" }}
           variant="h2"
           id="tableTitle"
           component="div"
@@ -47,8 +52,8 @@ const CustomTable = ({ title, headers, items }: Props) => {
           {title}
         </Typography>
       </Toolbar>
-      <TableContainer>
-        <Table aria-label="simple table">
+      <TableContainer style={{ maxHeight: "90%" }}>
+        <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow
               className={
@@ -66,13 +71,19 @@ const CustomTable = ({ title, headers, items }: Props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {Object.keys(items).map((id) => (
-              <CustomTableRow
-                key={id}
-                isInventory={isInventory}
-                item={items[id] as ActionType & ItemType}
-              />
-            ))}
+            {Object.keys(items)
+              .sort((a, b) =>
+                isInventory
+                  ? getExpiration(a) - getExpiration(b)
+                  : parseInt(b) - parseInt(a)
+              )
+              .map((id) => (
+                <CustomTableRow
+                  key={id}
+                  isInventory={isInventory}
+                  item={items[id] as ActionType & ItemType}
+                />
+              ))}
           </TableBody>
         </Table>
       </TableContainer>

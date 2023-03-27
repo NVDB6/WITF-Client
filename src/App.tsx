@@ -11,6 +11,7 @@ const ACTIONS_HEADERS = [
   "Food Item",
   "In or Out",
   "Same or New",
+  "",
 ];
 const INVENTORY_HEADERS = ["Icon", "Food Item", "Expires In (days)"];
 
