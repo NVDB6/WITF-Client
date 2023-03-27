@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import CustomTable from "./components/CustomTable";
 import { ActionListType, ActionType, InventoryType } from "./utils/types";
-import { db } from "./firebase";
+import { db } from "./utils/firebase";
 
 const ACTIONS_HEADERS = [
   "Time",
@@ -11,6 +11,7 @@ const ACTIONS_HEADERS = [
   "Food Item",
   "In or Out",
   "Same or New",
+  "Action UID",
   "",
 ];
 const INVENTORY_HEADERS = ["Icon", "Food Item", "Expires In (days)"];
@@ -36,7 +37,14 @@ function App() {
           const id = change.doc.id;
           if (change.type === "added" && id !== "test") {
             updated = true;
-            const { timeAction, itemName, intoFridge, imageUrl, dateBought } = {
+            const {
+              timeAction,
+              itemName,
+              intoFridge,
+              imageUrl,
+              dateBought,
+              actionUid,
+            } = {
               ...(change.doc.data() as ActionType),
               timeAction: change.doc.data().timeAction.toDate(),
               dateBought: change.doc.data().dateBought?.toDate(),
@@ -78,8 +86,12 @@ function App() {
               itemName,
               intoFridge,
               imageUrl,
+              actionUid,
               dateBought: newDateBought,
             };
+          } else if (change.type === "removed") {
+            updated = true;
+            delete newActionsList[id];
           }
         });
       if (updated) {

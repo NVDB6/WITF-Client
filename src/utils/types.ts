@@ -5,6 +5,7 @@ type ActionType = {
   intoFridge: boolean;
   timeAction: Date;
   imageUrl: string;
+  actionUid: string;
   dateBought: Date;
 };
 type ActionListType = { [id: string]: ActionType };

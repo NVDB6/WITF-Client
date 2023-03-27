@@ -80,6 +80,7 @@ const CustomTable = ({ title, headers, items }: Props) => {
               .map((id) => (
                 <CustomTableRow
                   key={id}
+                  id={id}
                   isInventory={isInventory}
                   item={items[id] as ActionType & ItemType}
                 />

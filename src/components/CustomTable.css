@@ -24,6 +24,10 @@
     padding: 10px
 }
 
+.delete-button:hover {
+    cursor: pointer;
+}
+
 .item-image {
     height: 100px
 }

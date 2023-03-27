@@ -3,22 +3,28 @@ import CustomTableCell from "./CustomTableCell";
 import { ActionType, ItemType } from "../utils/types";
 import { FoodItems } from "../utils/FoodItems";
 import { FaTrash } from "react-icons/fa";
+import { deleteDoc, doc } from "firebase/firestore";
+import { db, storage } from "../utils/firebase";
+import { deleteObject, ref } from "firebase/storage";
 
 type Props = {
   isInventory: boolean;
   item: ActionType & ItemType;
+  id: string;
 };
 
-const CustomTableRow = ({ isInventory, item }: Props) => {
-  const { timeAction, itemName, dateBought, imageUrl, intoFridge } = item;
+const CustomTableRow = ({ isInventory, item, id }: Props) => {
+  const { timeAction, itemName, dateBought, imageUrl, intoFridge, actionUid } =
+    item;
 
-  const handleDelete = () => {};
+  const handleDelete = () => {
+    deleteDoc(doc(db, "fridge-items", id));
+    deleteObject(ref(storage, `${id}.png`));
+  };
 
   if (isInventory)
     return (
-      <TableRow
-        className={!isInventory ? "table-row-primary" : "table-row-secondary"}
-      >
+      <TableRow>
         <CustomTableCell
           text={
             (
@@ -87,6 +93,11 @@ const CustomTableRow = ({ isInventory, item }: Props) => {
       />
       <CustomTableCell
         text={timeAction.getTime() === dateBought.getTime() ? "New" : "Same"}
+        isHeader={false}
+        isInventory={isInventory}
+      />
+      <CustomTableCell
+        text={actionUid}
         isHeader={false}
         isInventory={isInventory}
       />
