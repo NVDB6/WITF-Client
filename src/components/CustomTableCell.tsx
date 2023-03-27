@@ -1,7 +1,7 @@
 import { TableCell, Typography } from "@mui/material";
 
 type Props = {
-  text: string;
+  text: any;
   isHeader: boolean;
   isInventory: boolean;
 };

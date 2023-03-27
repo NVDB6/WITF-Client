@@ -1,6 +1,6 @@
 import { TableRow } from "@mui/material";
 import CustomTableCell from "./CustomTableCell";
-import { ActionType, ItemType } from "./types";
+import { ActionType, ItemType } from "../types";
 import { FoodItems } from "../FoodItems";
 
 type Props = {
@@ -9,7 +9,7 @@ type Props = {
 };
 
 const CustomTableRow = ({ isInventory, item }: Props) => {
-  const { timeAction, itemName, dateBought, intoFridge } = item;
+  const { timeAction, itemName, dateBought, imageUrl, intoFridge } = item;
   if (isInventory)
     return (
       <TableRow
@@ -57,6 +57,11 @@ const CustomTableRow = ({ isInventory, item }: Props) => {
     >
       <CustomTableCell
         text={timeAction.toString().split(" ").slice(1, 5).join(" ")}
+        isHeader={false}
+        isInventory={isInventory}
+      />
+      <CustomTableCell
+        text={<img src={imageUrl} alt="" className="item-image" />}
         isHeader={false}
         isInventory={isInventory}
       />

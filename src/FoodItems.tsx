@@ -10,7 +10,7 @@ import {
 } from "react-icons/gi";
 import { BsTrash2Fill } from "react-icons/bs";
 import { BiDish } from "react-icons/bi";
-import { FoodItemsType } from "./components/types";
+import { FoodItemsType } from "./types";
 
 const FoodItems: FoodItemsType = {
   Apple: {

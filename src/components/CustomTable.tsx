@@ -7,7 +7,7 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { ActionListType, ActionType, InventoryType, ItemType } from "./types";
+import { ActionListType, ActionType, InventoryType, ItemType } from "../types";
 import "./CustomTable.css";
 import CustomTableCell from "./CustomTableCell";
 import CustomTableRow from "./CustomTableRow";
