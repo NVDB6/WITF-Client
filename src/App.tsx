@@ -6,7 +6,7 @@ import { ActionListType, ActionType, InventoryType } from "./components/types";
 import { db } from "./firebase";
 
 const ACTIONS_HEADERS = ["Time", "Food Item", "Date Bought", "In or Out"];
-const INVENTORY_HEADERS = ["Food Item", "Date Bought", "Expires In (days)"];
+const INVENTORY_HEADERS = ["Icon", "Food Item", "Expires In (days)"];
 
 const OUT_OF_FRIDGE_TIME = 5; // In minutes
 

@@ -1,7 +1,7 @@
 import { TableRow } from "@mui/material";
 import CustomTableCell from "./CustomTableCell";
 import { ActionType, ItemType } from "./types";
-import FoodLabels from "../foodLabels.json";
+import { FoodItems } from "../FoodItems";
 
 type Props = {
   isInventory: boolean;
@@ -10,21 +10,60 @@ type Props = {
 
 const CustomTableRow = ({ isInventory, item }: Props) => {
   const { timeAction, itemName, dateBought, intoFridge } = item;
+  if (isInventory)
+    return (
+      <TableRow
+        className={!isInventory ? "table-row-primary" : "table-row-secondary"}
+      >
+        <CustomTableCell
+          text={
+            (
+              FoodItems as {
+                [id: string]: { name: string; expiration: number; icon: any };
+              }
+            )[itemName].icon
+          }
+          isHeader={false}
+          isInventory={isInventory}
+        />
+        <CustomTableCell
+          text={
+            (
+              FoodItems as {
+                [id: string]: { name: string; expiration: number };
+              }
+            )[itemName].name
+          }
+          isHeader={false}
+          isInventory={isInventory}
+        />
+        <CustomTableCell
+          text={(
+            (
+              FoodItems as {
+                [id: string]: { name: string; expiration: number };
+              }
+            )[itemName].expiration -
+            (new Date().getDate() - dateBought.getDate())
+          ).toString()}
+          isHeader={false}
+          isInventory={isInventory}
+        />
+      </TableRow>
+    );
   return (
     <TableRow
       className={!isInventory ? "table-row-primary" : "table-row-secondary"}
     >
-      {!isInventory && (
-        <CustomTableCell
-          text={timeAction.toString().split(" ").slice(1, 5).join(" ")}
-          isHeader={false}
-          isInventory={isInventory}
-        />
-      )}
+      <CustomTableCell
+        text={timeAction.toString().split(" ").slice(1, 5).join(" ")}
+        isHeader={false}
+        isInventory={isInventory}
+      />
       <CustomTableCell
         text={
           (
-            FoodLabels as {
+            FoodItems as {
               [id: string]: { name: string; expiration: number };
             }
           )[itemName].name
@@ -37,26 +76,11 @@ const CustomTableRow = ({ isInventory, item }: Props) => {
         isHeader={false}
         isInventory={isInventory}
       />
-      {isInventory ? (
-        <CustomTableCell
-          text={(
-            (
-              FoodLabels as {
-                [id: string]: { name: string; expiration: number };
-              }
-            )[itemName].expiration -
-            (new Date().getDate() - dateBought.getDate())
-          ).toString()}
-          isHeader={false}
-          isInventory={isInventory}
-        />
-      ) : (
-        <CustomTableCell
-          text={intoFridge ? "In" : "Out"}
-          isHeader={false}
-          isInventory={isInventory}
-        />
-      )}
+      <CustomTableCell
+        text={intoFridge ? "In" : "Out"}
+        isHeader={false}
+        isInventory={isInventory}
+      />
     </TableRow>
   );
 };

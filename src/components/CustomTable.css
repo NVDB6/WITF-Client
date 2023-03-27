@@ -4,10 +4,12 @@
 }
 
 .table-row-primary {
+    height: 100px;
     border-bottom: 1px solid #A9BD9A !important;
 }
 
 .table-row-secondary {
+    height: 100px;
     border-bottom: 1px solid #526C3F !important;
 }
 
