@@ -1,7 +1,7 @@
 import { TableRow } from "@mui/material";
 import CustomTableCell from "./CustomTableCell";
-import { ActionType, ItemType } from "../types";
-import { FoodItems } from "../FoodItems";
+import { ActionType, ItemType } from "../utils/types";
+import { FoodItems } from "../utils/FoodItems";
 
 type Props = {
   isInventory: boolean;
@@ -77,12 +77,12 @@ const CustomTableRow = ({ isInventory, item }: Props) => {
         isInventory={isInventory}
       />
       <CustomTableCell
-        text={dateBought.toString().split(" ").slice(1, 5).join(" ")}
+        text={intoFridge ? "In" : "Out"}
         isHeader={false}
         isInventory={isInventory}
       />
       <CustomTableCell
-        text={intoFridge ? "In" : "Out"}
+        text={timeAction.getTime() === dateBought.getTime() ? "New" : "Same"}
         isHeader={false}
         isInventory={isInventory}
       />

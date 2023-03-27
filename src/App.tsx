@@ -2,15 +2,15 @@ import { collection, doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import CustomTable from "./components/CustomTable";
-import { ActionListType, ActionType, InventoryType } from "./types";
+import { ActionListType, ActionType, InventoryType } from "./utils/types";
 import { db } from "./firebase";
 
 const ACTIONS_HEADERS = [
   "Time",
   "Image",
   "Food Item",
-  "Date Bought",
   "In or Out",
+  "Same or New",
 ];
 const INVENTORY_HEADERS = ["Icon", "Food Item", "Expires In (days)"];
 
@@ -47,7 +47,6 @@ function App() {
             // Check if the same food item had been taken out in the last 5 minutes
             // The last time the same item had the opposite action
             let newDateBought = dateBought;
-            console.log(!newDateBought);
 
             const itemLastActionKey = Object.keys(newActionsList).find(
               (key) =>

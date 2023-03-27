@@ -7,7 +7,12 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { ActionListType, ActionType, InventoryType, ItemType } from "../types";
+import {
+  ActionListType,
+  ActionType,
+  InventoryType,
+  ItemType,
+} from "../utils/types";
 import "./CustomTable.css";
 import CustomTableCell from "./CustomTableCell";
 import CustomTableRow from "./CustomTableRow";
@@ -34,7 +39,7 @@ const CustomTable = ({ title, headers, items }: Props) => {
         }}
       >
         <Typography
-          sx={{ flex: "1 1 100%", fontWeight: 500 }}
+          sx={{ flex: "1 1 100%", fontWeight: 500, marginTop: "50px" }}
           variant="h2"
           id="tableTitle"
           component="div"
