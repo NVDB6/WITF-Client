@@ -11,6 +11,9 @@ type Props = {
 
 const CustomTableRow = ({ isInventory, item }: Props) => {
   const { timeAction, itemName, dateBought, imageUrl, intoFridge } = item;
+
+  const handleDelete = () => {};
+
   if (isInventory)
     return (
       <TableRow
@@ -89,7 +92,7 @@ const CustomTableRow = ({ isInventory, item }: Props) => {
       />
       <CustomTableCell
         text={
-          <button className="delete-button">
+          <button className="delete-button" onClick={handleDelete}>
             <FaTrash color="white" size={30} />
           </button>
         }

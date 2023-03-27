@@ -22,15 +22,11 @@ function App() {
   const [inventoryList, setInventoryList] = useState<InventoryType>({});
 
   const actionsListRef = useRef<ActionListType>();
-  const inventoryListRef = useRef<InventoryType>();
-
   actionsListRef.current = actionsList;
-  inventoryListRef.current = inventoryList;
 
   useEffect(() => {
     const unsub = onSnapshot(collection(db, "fridge-items"), (snap) => {
       let newActionsList: ActionListType = { ...actionsListRef.current };
-      let newInventory: InventoryType = { ...inventoryListRef.current };
       let updated = false;
       // Sort changes by oldest first
       snap
@@ -49,13 +45,13 @@ function App() {
             // The last time the same item had the opposite action
             let newDateBought = dateBought;
 
-            const itemLastActionKey = Object.keys(newActionsList).find(
-              (key) =>
-                newActionsList[key].itemName === itemName &&
-                newActionsList[key].intoFridge !== intoFridge
-            );
-            if (intoFridge) {
-              if (!newDateBought) {
+            if (!newDateBought) {
+              const itemLastActionKey = Object.keys(newActionsList).find(
+                (key) =>
+                  newActionsList[key].itemName === itemName &&
+                  newActionsList[key].intoFridge !== intoFridge
+              );
+              if (intoFridge) {
                 let lowerBoundTime = new Date();
                 lowerBoundTime.setMinutes(
                   lowerBoundTime.getMinutes() - OUT_OF_FRIDGE_TIME
@@ -68,10 +64,7 @@ function App() {
                 updateDoc(doc(db, "fridge-items", id), {
                   dateBought: newDateBought,
                 });
-              }
-              newInventory[id] = { itemName, dateBought: newDateBought };
-            } else {
-              if (!newDateBought) {
+              } else {
                 newDateBought = itemLastActionKey
                   ? newActionsList[itemLastActionKey]?.dateBought
                   : timeAction;
@@ -79,7 +72,6 @@ function App() {
                   dateBought: newDateBought,
                 });
               }
-              itemLastActionKey && delete newInventory[itemLastActionKey];
             }
             newActionsList[id] = {
               timeAction,
@@ -92,11 +84,28 @@ function App() {
         });
       if (updated) {
         setActionsList(newActionsList);
-        setInventoryList(newInventory);
       }
     });
     return unsub;
   }, []);
+
+  useEffect(() => {
+    let newInventoryList: InventoryType = {};
+    Object.keys(actionsList)
+      .sort((a, b) => parseInt(a) - parseInt(b))
+      .forEach((id) => {
+        const { itemName, dateBought } = actionsList[id];
+        if (actionsList[id].intoFridge) {
+          newInventoryList[id] = { itemName, dateBought };
+        } else {
+          const removeId = Object.keys(newInventoryList).find(
+            (curId) => newInventoryList[curId].itemName === itemName
+          );
+          removeId && delete newInventoryList[removeId];
+        }
+      });
+    setInventoryList(newInventoryList);
+  }, [actionsList]);
 
   return (
     <div className="container">
