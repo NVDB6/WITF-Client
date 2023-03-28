@@ -7,6 +7,8 @@ type ActionType = {
   imageUrl: string;
   actionUid: string;
   dateBought: Date;
+  foodConfidence: number;
+  iihConfidence: number;
 };
 type ActionListType = { [id: string]: ActionType };
 

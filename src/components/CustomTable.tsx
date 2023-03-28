@@ -22,9 +22,10 @@ type Props = {
   title: string;
   headers: Array<string>;
   items: ActionListType | InventoryType;
+  style: { width: string };
 };
 
-const CustomTable = ({ title, headers, items }: Props) => {
+const CustomTable = ({ title, headers, items, style }: Props) => {
   const isInventory = title === "Fridge Inventory";
 
   const getExpiration = (id: string) =>
@@ -41,6 +42,7 @@ const CustomTable = ({ title, headers, items }: Props) => {
       className={`table-container ${
         isInventory ? "primary-bg" : "secondary-bg"
       }`}
+      style={style}
     >
       <Toolbar style={{ height: "10%" }}>
         <Typography

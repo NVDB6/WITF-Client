@@ -6,6 +6,7 @@ import { FaTrash } from "react-icons/fa";
 import { deleteDoc, doc } from "firebase/firestore";
 import { db, storage } from "../utils/firebase";
 import { deleteObject, ref } from "firebase/storage";
+import useExpiryCountdown from "../hooks/useExpiryCountdown";
 
 type Props = {
   isInventory: boolean;
@@ -14,13 +15,32 @@ type Props = {
 };
 
 const CustomTableRow = ({ isInventory, item, id }: Props) => {
-  const { timeAction, itemName, dateBought, imageUrl, intoFridge, actionUid } =
-    item;
+  const {
+    timeAction,
+    itemName,
+    dateBought,
+    imageUrl,
+    intoFridge,
+    actionUid,
+    foodConfidence,
+    iihConfidence,
+  } = item;
 
   const handleDelete = () => {
     deleteDoc(doc(db, "fridge-items", id));
     deleteObject(ref(storage, `${id}.png`));
   };
+
+  let expiryDate = new Date(dateBought);
+  expiryDate.setDate(
+    expiryDate.getDate() +
+      (
+        FoodItems as {
+          [id: string]: { name: string; expiration: number };
+        }
+      )[itemName].expiration
+  );
+  const { expiryTime } = useExpiryCountdown(expiryDate);
 
   if (isInventory)
     return (
@@ -48,14 +68,7 @@ const CustomTableRow = ({ isInventory, item, id }: Props) => {
           isInventory={isInventory}
         />
         <CustomTableCell
-          text={(
-            (
-              FoodItems as {
-                [id: string]: { name: string; expiration: number };
-              }
-            )[itemName].expiration -
-            (new Date().getDate() - dateBought.getDate())
-          ).toString()}
+          text={expiryTime}
           isHeader={false}
           isInventory={isInventory}
         />
@@ -98,6 +111,16 @@ const CustomTableRow = ({ isInventory, item, id }: Props) => {
       />
       <CustomTableCell
         text={actionUid}
+        isHeader={false}
+        isInventory={isInventory}
+      />
+      <CustomTableCell
+        text={foodConfidence}
+        isHeader={false}
+        isInventory={isInventory}
+      />
+      <CustomTableCell
+        text={iihConfidence}
         isHeader={false}
         isInventory={isInventory}
       />

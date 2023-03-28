@@ -12,11 +12,13 @@ const ACTIONS_HEADERS = [
   "In or Out",
   "Same or New",
   "Action UID",
+  "Food Confidence",
+  "IIH Confidence",
   "",
 ];
 const INVENTORY_HEADERS = ["Icon", "Food Item", "Expires In (days)"];
 
-const OUT_OF_FRIDGE_TIME = 5; // In minutes
+const OUT_OF_FRIDGE_TIME = 300_000; // In milliseconds
 
 function App() {
   const [actionsList, setActionsList] = useState<ActionListType>({});
@@ -29,7 +31,7 @@ function App() {
     const unsub = onSnapshot(collection(db, "fridge-items"), (snap) => {
       let newActionsList: ActionListType = { ...actionsListRef.current };
       let updated = false;
-      // Sort changes by oldest first
+      // Sort changes by oldest to newest
       snap
         .docChanges()
         .sort((a, b) => parseInt(a.doc.id) - parseInt(b.doc.id))
@@ -44,6 +46,8 @@ function App() {
               imageUrl,
               dateBought,
               actionUid,
+              foodConfidence,
+              iihConfidence,
             } = {
               ...(change.doc.data() as ActionType),
               timeAction: change.doc.data().timeAction.toDate(),
@@ -54,32 +58,56 @@ function App() {
             let newDateBought = dateBought;
 
             if (!newDateBought) {
-              const itemLastActionKey = Object.keys(newActionsList).find(
-                (key) =>
-                  newActionsList[key].itemName === itemName &&
-                  newActionsList[key].intoFridge !== intoFridge
+              // Most recent entry with opposite action, that happened before action but after isNew time threshold
+              const itemLastActionKey = Object.keys(newActionsList)
+                .sort((a, b) => parseInt(b) - parseInt(a))
+                .find(
+                  (key) =>
+                    newActionsList[key].itemName === itemName &&
+                    newActionsList[key].intoFridge !== intoFridge &&
+                    newActionsList[key].timeAction < timeAction
+                );
+              const lowerBoundTime = new Date(
+                new Date().getTime() - OUT_OF_FRIDGE_TIME
               );
               if (intoFridge) {
-                let lowerBoundTime = new Date();
-                lowerBoundTime.setMinutes(
-                  lowerBoundTime.getMinutes() - OUT_OF_FRIDGE_TIME
-                );
                 newDateBought =
                   itemLastActionKey &&
                   newActionsList[itemLastActionKey].timeAction > lowerBoundTime
                     ? newActionsList[itemLastActionKey].dateBought
                     : timeAction;
-                updateDoc(doc(db, "fridge-items", id), {
-                  dateBought: newDateBought,
-                });
-              } else {
+              } else
                 newDateBought = itemLastActionKey
-                  ? newActionsList[itemLastActionKey]?.dateBought
+                  ? newActionsList[itemLastActionKey].dateBought
                   : timeAction;
-                updateDoc(doc(db, "fridge-items", id), {
-                  dateBought: newDateBought,
-                });
-              }
+              // TODO: Might have to move this out of this if statement
+              // Ordered from oldest to newest
+              let futureItemActionKeys = [
+                id,
+                ...Object.keys(newActionsList).filter(
+                  (key) =>
+                    newActionsList[key].itemName === itemName &&
+                    newActionsList[key].timeAction > timeAction
+                ),
+              ];
+              futureItemActionKeys.forEach((key, i) => {
+                if (
+                  i > 0 &&
+                  parseInt(key) - parseInt(futureItemActionKeys[i - 1]) >
+                    OUT_OF_FRIDGE_TIME
+                ) {
+                  newActionsList[key].dateBought =
+                    i === 1
+                      ? newDateBought
+                      : newActionsList[futureItemActionKeys[i - 1]].dateBought;
+                  updateDoc(doc(db, "fridge-items", key), {
+                    dateBought: newActionsList[key].dateBought,
+                  });
+                }
+              });
+              updateDoc(doc(db, "fridge-items", id), {
+                dateBought: newDateBought,
+              });
             }
             newActionsList[id] = {
               timeAction,
@@ -87,6 +115,8 @@ function App() {
               intoFridge,
               imageUrl,
               actionUid,
+              foodConfidence,
+              iihConfidence,
               dateBought: newDateBought,
             };
           } else if (change.type === "removed") {
@@ -125,11 +155,13 @@ function App() {
         title="Fridge Inventory"
         headers={INVENTORY_HEADERS}
         items={inventoryList}
+        style={{ width: "40%" }}
       />
       <CustomTable
         title="Actions List"
         headers={ACTIONS_HEADERS}
         items={actionsList}
+        style={{ width: "60%" }}
       />
     </div>
   );
