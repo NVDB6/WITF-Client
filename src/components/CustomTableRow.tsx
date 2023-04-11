@@ -105,22 +105,7 @@ const CustomTableRow = ({ isInventory, item, id }: Props) => {
         isInventory={isInventory}
       />
       <CustomTableCell
-        text={timeAction.getTime() === dateBought.getTime() ? "New" : "Same"}
-        isHeader={false}
-        isInventory={isInventory}
-      />
-      <CustomTableCell
-        text={actionUid}
-        isHeader={false}
-        isInventory={isInventory}
-      />
-      <CustomTableCell
-        text={foodConfidence}
-        isHeader={false}
-        isInventory={isInventory}
-      />
-      <CustomTableCell
-        text={iihConfidence}
+        text={`${Math.floor(foodConfidence * 100)}%`}
         isHeader={false}
         isInventory={isInventory}
       />

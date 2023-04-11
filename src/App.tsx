@@ -10,10 +10,7 @@ const ACTIONS_HEADERS = [
   "Image",
   "Food Item",
   "In or Out",
-  "Same or New",
-  "Action UID",
   "Food Confidence",
-  "IIH Confidence",
   "",
 ];
 const INVENTORY_HEADERS = ["Icon", "Food Item", "Expires In (days)"];
